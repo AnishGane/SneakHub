@@ -70,7 +70,7 @@ const Navbar = () => {
                     <UserButton appearance={{ elements: { userButtonAvatarBox: 'w-8 h-8' } }} signOutRedirectUrl="/" />
                 </SignedIn>
                 {/* Mobile hamburger */}
-                <button aria-label="Toggle menu" className="md:hidden inline-flex items-center justify-center p-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                <button aria-label="Toggle menu" className="cursor-pointer md:hidden inline-flex items-center justify-center p-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>
                     {isMenuOpen ? <IoClose className='w-7 h-7' /> : <IoMenu className='w-7 h-7' />}
                 </button>
             </div>
