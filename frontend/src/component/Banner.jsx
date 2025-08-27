@@ -49,7 +49,7 @@ const Banner = () => {
         </div>
 
         {/* Right: image */}
-        <div className="group mx-autow-full relative max-w-md sm:max-w-2xl md:mr-10 md:max-w-md lg:max-w-md">
+        <div className="group relative mx-auto w-full max-w-md sm:max-w-2xl md:mr-6 md:max-w-md lg:max-w-md">
           {/* Outer gradient ring */}
           <div className="absolute -inset-2 rounded-3xl bg-gradient-to-tr from-indigo-300/50 via-transparent to-rose-300/50 opacity-70 blur-xl transition-opacity group-hover:opacity-90 dark:from-indigo-600/20 dark:to-rose-600/20" />
 
@@ -82,7 +82,7 @@ const Banner = () => {
                     <h3 className="text-sm font-semibold tracking-tight sm:text-base md:text-lg">
                       Neon Pulse Runner
                     </h3>
-                    <p className="block text-xs text-neutral-200">
+                    <p className="block text-xs text-neutral-200 md:hidden lg:block">
                       Lightweight, responsive, and ready for the streets.
                     </p>
                     <div className="mt-2 flex items-center gap-2">

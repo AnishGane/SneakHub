@@ -45,7 +45,7 @@ const Navbar = () => {
               {hovered === idx && (
                 <motion.span
                   layoutId="hovered-span"
-                  className="absolute inset-0 h-full w-full rounded-md bg-neutral-200/70"
+                  className="absolute inset-0 h-full w-full rounded-md bg-black/15"
                 ></motion.span>
               )}
               {}
@@ -101,7 +101,7 @@ const Navbar = () => {
       </div>
       {/* Mobile dropdown menu */}
       {isMenuOpen && (
-        <div className="absolute top-20 right-0 left-0 z-50 h-[80vh] border-t border-neutral-200 bg-white/60 shadow-sm backdrop-blur-2xl backdrop-saturate-150 md:hidden">
+        <div className="absolute top-20 right-0 left-0 z-50 h-[87dvh] border-t border-neutral-200 bg-white/60 shadow-sm backdrop-blur-2xl backdrop-saturate-150 md:hidden">
           <ul className="flex flex-col py-2">
             {navLinks.map((link, idx) => (
               <li key={`m-${link.to}`}>

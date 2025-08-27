@@ -2,6 +2,7 @@ import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
 import React from 'react';
 import Banner from '../component/Banner';
 import { useStore } from '../context/StoreContext.jsx';
+import NewArrival from '../component/NewArrival.jsx';
 
 const Home = () => {
   const { isMenuOpen, setIsMenuOpen } = useStore();
@@ -17,6 +18,7 @@ const Home = () => {
     <>
       <div>
         <Banner />
+        <NewArrival />
       </div>
     </>
   );
