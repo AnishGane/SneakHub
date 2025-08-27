@@ -1,14 +1,14 @@
 import React from 'react';
-import BannerImage from '../assets/Banner.jpeg';
+import BannerImage from '../assets/Banner2.jpeg';
 
 const Banner = () => {
   return (
-    <div className="flex h-140 w-full rounded-[8px] bg-gray-200">
+    <div className="flex h-140 w-full flex-col rounded-[8px] bg-gray-300 sm:flex-row">
       {/* Left Div */}
-      <div className="flex"></div>
+      <div className="flex-1"></div>
       {/* Right Div */}
-      <div className="w-3/4">
-        {/* <img src={BannerImage} alt="banner image" className="h-full w-full object-contain" /> */}
+      <div className="w-1/2">
+        <img src={BannerImage} alt="banner image" className="h-full w-full object-contain" />
       </div>
     </div>
   );
