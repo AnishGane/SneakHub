@@ -22,8 +22,8 @@ const Navbar = () => {
   return (
     <div className="relative mt-3 flex h-20 w-full items-center justify-between px-3 md:px-4">
       {/* Logo */}
-      <Link to="/">
-        <img src={Logo} alt="SneakHub logo" className="h-auto w-40" />
+      <Link to="/" className="justify-self-start">
+        <img src={Logo} alt="SneakHub logo" className="block h-10 w-auto" />
       </Link>
 
       {/* Middle Nav */}
@@ -58,7 +58,7 @@ const Navbar = () => {
       </ul>
 
       {/* Right Nav */}
-      <div className="flex items-center gap-4 pr-1 md:gap-6 md:pr-2">
+      <div className="flex items-center gap-4 justify-self-end pr-1 md:gap-6 md:pr-2">
         <SignedOut>
           <div className="flex items-center gap-4">
             <button
