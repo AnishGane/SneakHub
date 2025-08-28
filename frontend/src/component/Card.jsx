@@ -1,9 +1,10 @@
 import React from 'react';
 
-const Card = ({ product }) => {
+const Card = ({ product, onClick }) => {
   return (
     <article
       key={product.id}
+      onClick={onClick}
       className="group relative overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm transition-all duration-300 hover:shadow-lg dark:border-neutral-800 dark:bg-neutral-900"
     >
       {/* Badge */}

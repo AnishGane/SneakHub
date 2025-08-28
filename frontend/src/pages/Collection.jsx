@@ -3,6 +3,7 @@ import { products } from '../assets/assets.js';
 import Card from '../component/Card.jsx';
 import Title from '../component/Title.jsx';
 import dropDown from '../assets/dropdown_icon.png';
+import { useNavigate } from 'react-router-dom';
 
 const Collection = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -11,6 +12,7 @@ const Collection = () => {
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [showFilter, setShowFilter] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(true);
+  const navigate = useNavigate();
 
   // Filter products based on selected criteria
   const filteredProducts = products.filter((product) => {
@@ -186,7 +188,11 @@ const Collection = () => {
               {sortedProducts.length > 0 ? (
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
                   {sortedProducts.map((product) => (
-                    <Card key={product.id} product={product} />
+                    <Card
+                      key={product.id}
+                      product={product}
+                      onClick={() => navigate(`/product/${product.id}`)}
+                    />
                   ))}
                 </div>
               ) : (
