@@ -1,6 +1,7 @@
 import React from 'react';
 import BannerImage from '../assets/Banner2.jpeg';
 import BannerImage1 from '../assets/BannerShoe.jpeg';
+import { Link } from 'react-router-dom';
 
 const Banner = () => {
   return (
@@ -25,18 +26,18 @@ const Banner = () => {
           </p>
 
           <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row md:justify-start">
-            <a
-              href="#collection"
+            <Link
+              to={'/collection'}
               className="inline-flex w-full items-center justify-center rounded-md bg-black px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:opacity-90 sm:w-auto dark:bg-white dark:text-black"
             >
               Shop now
-            </a>
-            <a
-              href="#explore"
+            </Link>
+            <Link
+              to={'/collection'}
               className="inline-flex w-full items-center justify-center rounded-md border border-neutral-300 bg-white px-5 py-2.5 text-sm font-medium text-neutral-800 shadow-sm transition hover:bg-neutral-100 sm:w-auto dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:hover:bg-neutral-800"
             >
               Explore collection
-            </a>
+            </Link>
           </div>
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 md:justify-start">

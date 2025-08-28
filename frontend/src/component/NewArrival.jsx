@@ -1,7 +1,7 @@
 import React from 'react';
 import Title from './Title';
 import Card from './Card';
-
+import { getNewArrivals } from '../assets/assets.js';
 const LatestCollection = () => {
   return (
     <div className="mt-2 w-full px-2 sm:mt-8">
@@ -15,7 +15,11 @@ const LatestCollection = () => {
 
       {/* Grid */}
       <div className="mx-auto w-full max-w-7xl pb-8">
-        <Card />
+        <div className="grid grid-cols-1 gap-8 px-1 sm:grid-cols-2 sm:gap-9 sm:px-2 md:grid-cols-3 lg:grid-cols-4">
+          {getNewArrivals(8).map((product) => (
+            <Card product={product} key={product.id} />
+          ))}
+        </div>
       </div>
     </div>
   );
