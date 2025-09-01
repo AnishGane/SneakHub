@@ -20,7 +20,7 @@ const Navbar = () => {
   ];
 
   return (
-    <div className="relative mt-3 flex h-20 w-full items-center justify-between px-3 md:px-4">
+    <div className="relative mt-3 flex h-20 w-full items-center justify-between bg-red-400 px-3 md:px-4">
       {/* Logo */}
       <Link to="/" className="justify-self-start">
         <img src={Logo} alt="SneakHub logo" className="mt-4 block h-10 w-auto" />

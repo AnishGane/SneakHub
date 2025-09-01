@@ -25,14 +25,9 @@ const Collection = () => {
 
   const brands = [...new Set(products.map((product) => product.brand))];
 
-  // ✅ Use window scroll instead of div scroll
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 300) {
-        setShowScrollTop(true);
-      } else {
-        setShowScrollTop(false);
-      }
+      setShowScrollTop(window.scrollY > 300);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -45,12 +40,9 @@ const Collection = () => {
     };
   }, []);
 
-  // ✅ Smooth scroll to top
+  // Smooth scroll
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   // Sort the filtered products
