@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+// import { useStore } from '../context/StoreContext.jsx';
 import { products } from '../assets/assets.js';
 import Card from '../component/Card.jsx';
 import Title from '../component/Title.jsx';
@@ -6,17 +7,19 @@ import dropDown from '../assets/dropdown_icon.png';
 import { useNavigate } from 'react-router-dom';
 
 const Collection = () => {
+  // const { products } = useStore();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedGender, setSelectedGender] = useState('all');
   const [sortType, setSortType] = useState('relevant');
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [showFilter, setShowFilter] = useState(false);
-  const [showScrollTop, setShowScrollTop] = useState(true);
+  const [showScrollTop, setShowScrollTop] = useState(false);
   const navigate = useNavigate();
 
   // Filter products based on selected criteria
   const filteredProducts = products.filter((product) => {
-    const categoryMatch = selectedCategory === 'all' || product.tags.includes(selectedCategory);
+    const categoryMatch =
+      selectedCategory === 'all' || (product.tags?.includes(selectedCategory) ?? false);
     const genderMatch = selectedGender === 'all' || product.gender === selectedGender;
     const brandMatch = selectedBrands.length === 0 || selectedBrands.includes(product.brand);
 
@@ -197,6 +200,7 @@ const Collection = () => {
                 <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
                   {sortedProducts.map((product) => (
                     <Card
+                      // key={product.id || product.sku || index}
                       key={product.id}
                       product={product}
                       onClick={() => navigate(`/product/${product.id}`)}
@@ -219,7 +223,15 @@ const Collection = () => {
           className="fixed right-5 bottom-5 z-50 flex items-center justify-center rounded-full bg-black p-3 text-white shadow-lg transition-all duration-300 hover:bg-gray-800 sm:right-10 sm:bottom-10"
           aria-label="Scroll to top"
         >
-          <img src={dropDown} alt="dropdown icon" className="h-auto w-8 rotate-180" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+          </svg>
         </button>
       )}
     </>
