@@ -40,11 +40,11 @@ const Banner = () => {
             </Link>
           </div>
 
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 lg:justify-start">
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 lg:justify-start">
             <div className="text-xs text-neutral-500 dark:text-neutral-400">
               Free shipping over $99
             </div>
-            <span className="hidden h-1 w-1 rounded-full bg-neutral-300 md:inline-block dark:bg-neutral-700" />
+            <span className="inline-block h-1 w-1 rounded-full bg-neutral-300 dark:bg-neutral-700" />
             <div className="text-xs text-neutral-500 dark:text-neutral-400">30-day returns</div>
           </div>
         </div>

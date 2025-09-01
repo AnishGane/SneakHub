@@ -58,19 +58,21 @@ const Collection = () => {
 
   return (
     <>
-      <div className="mb-5 bg-neutral-50 shadow-md sm:mb-10">
-        <div className="w-full px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mb-5 sm:mb-10">
+        <div className="w-full py-1">
           <div className="flex flex-col gap-8 lg:flex-row">
             {/* Left Sidebar - Filters */}
             <div className="w-full lg:w-80">
-              <div className="rounded-lg border-black bg-neutral-200/40 p-6 shadow-sm sm:border dark:border-neutral-800">
-                <div className="flex items-center justify-between sm:mb-3">
-                  <h2 className="text-xl font-semibold tracking-wide text-neutral-900">Filters</h2>
+              <div className="rounded-lg border-black bg-neutral-200/40 p-4 shadow-sm sm:border dark:border-neutral-800">
+                <div className="mb-1 flex items-center justify-between lg:mb-3">
+                  <h2 className="text-xl tracking-wide text-neutral-900 sm:font-semibold">
+                    Filters
+                  </h2>
                   <img
                     src={dropDown}
                     alt="drop down icon"
                     onClick={() => setShowFilter(!showFilter)}
-                    className={`h-auto w-6 sm:hidden ${showFilter ? '' : '-rotate-90'}`}
+                    className={`block h-auto w-6 cursor-pointer lg:hidden ${showFilter ? '' : '-rotate-90'}`}
                   />
                 </div>
                 {/* Gender Filter */}
@@ -84,7 +86,9 @@ const Collection = () => {
                           name="gender"
                           value={gender}
                           checked={selectedGender === gender}
-                          onChange={(e) => setSelectedGender(e.target.value)}
+                          onChange={(e) => {
+                            setSelectedGender(e.target.value);
+                          }}
                           className="h-4 w-4 cursor-pointer text-emerald-600 focus:ring-emerald-500"
                         />
                         <span className="ml-2 text-sm text-black capitalize">
@@ -106,7 +110,9 @@ const Collection = () => {
                           name="category"
                           value={category}
                           checked={selectedCategory === category}
-                          onChange={(e) => setSelectedCategory(e.target.value)}
+                          onChange={(e) => {
+                            setSelectedCategory(e.target.value);
+                          }}
                           className="h-4 w-4 cursor-pointer text-emerald-600 focus:ring-emerald-500"
                         />
                         <span className="ml-2 text-sm text-black capitalize">
@@ -118,7 +124,7 @@ const Collection = () => {
                 </div>
 
                 {/* Brand Filter */}
-                <div className={`mb-6 ${showFilter ? '' : 'hidden'} lg:block`}>
+                <div className={`mb-3 sm:mb-5 ${showFilter ? '' : 'hidden'} lg:block`}>
                   <h3 className="mb-3 text-sm font-medium text-black">Brands</h3>
                   <div className="space-y-2">
                     {brands.map((brand) => (
@@ -147,11 +153,21 @@ const Collection = () => {
                     setSelectedCategory('all');
                     setSelectedGender('all');
                     setSelectedBrands([]);
+                    setShowFilter(false);
                   }}
-                  className={`${showFilter ? '' : 'hidden'} w-full cursor-pointer rounded-md bg-neutral-100 px-4 py-3 text-sm font-medium tracking-wide text-neutral-700 transition-colors hover:bg-neutral-200 lg:block dark:bg-neutral-700 dark:text-white dark:hover:bg-neutral-600`}
+                  className={`${showFilter ? '' : 'hidden'} mb-2 w-full cursor-pointer rounded-md bg-black/55 px-4 py-3 text-base font-medium tracking-wide text-white transition-colors hover:bg-neutral-200 lg:block dark:bg-neutral-700 dark:text-white dark:hover:bg-neutral-600`}
                 >
                   Clear Filters
                 </button>
+                {/* Ok Filter for mobile */}
+                {showFilter && (
+                  <button
+                    onClick={() => setShowFilter(false)}
+                    className={`${showFilter ? '' : 'hidden'} w-full cursor-pointer rounded-md bg-[#B4E140] px-4 py-3 text-sm font-medium tracking-wide text-neutral-700 transition-colors hover:bg-neutral-200 lg:block dark:bg-neutral-700 dark:text-white dark:hover:bg-neutral-600`}
+                  >
+                    OK
+                  </button>
+                )}
               </div>
             </div>
 
@@ -163,7 +179,7 @@ const Collection = () => {
                 {/* Filter by price */}
                 <select
                   onChange={(e) => setSortType(e.target.value)}
-                  className="cursor-pointer border border-gray-600 px-4 py-2 text-center text-sm outline-none"
+                  className="w-3/4 cursor-pointer border border-gray-600 px-4 py-2 text-center text-sm outline-none sm:w-auto"
                 >
                   <option value="relevant">Sort by: Relevant</option>
                   <option value="low-high">Sort by: Low to High</option>
@@ -178,7 +194,7 @@ const Collection = () => {
 
               {/* Products Grid */}
               {sortedProducts.length > 0 ? (
-                <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4">
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
                   {sortedProducts.map((product) => (
                     <Card
                       key={product.id}
@@ -189,7 +205,7 @@ const Collection = () => {
                 </div>
               ) : (
                 <div className="flex h-40 items-center justify-center rounded-md border border-neutral-300 bg-neutral-100 text-lg text-gray-600">
-                  No products found. Try adjusting your filters.
+                  <p className="text-center"> No products found. Try adjusting your filters.</p>
                 </div>
               )}
             </div>

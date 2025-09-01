@@ -17,7 +17,7 @@ const LatestCollection = () => {
 
       {/* Grid */}
       <div className="mx-auto w-full max-w-7xl pb-8">
-        <div className="grid grid-cols-2 gap-4 px-0 sm:grid-cols-3 sm:gap-9 sm:px-2 md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-9 sm:px-2 md:grid-cols-4">
           {getNewArrivals(8).map((product) => (
             <Card
               product={product}

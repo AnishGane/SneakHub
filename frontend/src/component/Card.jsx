@@ -22,7 +22,7 @@ const Card = ({ product, onClick }) => {
       )}
 
       {/* Image */}
-      <div className="relative aspect-[3/4] w-full overflow-hidden sm:aspect-square">
+      <div className="relative h-48 w-full overflow-hidden sm:h-56 md:h-64">
         <img
           src={product.image}
           alt={product.name}
@@ -38,7 +38,7 @@ const Card = ({ product, onClick }) => {
       </div>
 
       {/* Content */}
-      <div className="p-3 sm:p-4 md:p-6">
+      <div className="flex flex-1 flex-col gap-1 p-3 sm:p-4">
         {/* Brand */}
         <p className="text-xs font-light tracking-wide text-neutral-500 uppercase sm:text-sm dark:text-neutral-400">
           {product.brand}

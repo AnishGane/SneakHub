@@ -1,5 +1,4 @@
 import React from 'react';
-import Logo from '../assets/MainLogo.png';
 import { Link, NavLink } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { IoCartOutline, IoMenu, IoClose } from 'react-icons/io5';
@@ -37,8 +36,10 @@ const Navbar = () => {
   return (
     <div className="relative mt-2 mb-2 flex h-15 w-full items-center justify-between rounded-[6px] bg-white px-1 sm:mt-3 sm:mb-5 md:px-4">
       {/* Logo */}
-      <Link to="/" className="justify-self-start">
-        <img src={Logo} alt="SneakHub logo" className="mt-4 block h-10 w-auto" />
+      <Link to="/" className="justify-self-start text-2xl">
+        <p className="font-light">
+          SNEAK<span className="font-semibold">HUB</span>
+        </p>
       </Link>
 
       {/* Middle Nav */}
