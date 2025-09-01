@@ -19,8 +19,23 @@ const Navbar = () => {
     { to: '/contact', label: 'Contact Us' },
   ];
 
+  React.useEffect(() => {
+    if (isMenuOpen) {
+      // Disable background scroll
+      document.body.style.overflow = 'hidden';
+    } else {
+      // Re-enable scroll
+      document.body.style.overflow = '';
+    }
+
+    // Cleanup when component unmounts
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMenuOpen]);
+
   return (
-    <div className="relative mt-3 flex h-20 w-full items-center justify-between bg-red-400 px-3 md:px-4">
+    <div className="relative mt-2 mb-2 flex h-15 w-full items-center justify-between rounded-[6px] bg-white px-1 sm:mt-3 sm:mb-5 md:px-4">
       {/* Logo */}
       <Link to="/" className="justify-self-start">
         <img src={Logo} alt="SneakHub logo" className="mt-4 block h-10 w-auto" />
@@ -101,7 +116,7 @@ const Navbar = () => {
       </div>
       {/* Mobile dropdown menu */}
       {isMenuOpen && (
-        <div className="absolute top-20 right-0 left-0 z-50 h-[87dvh] border-t border-neutral-200 bg-white/60 shadow-sm backdrop-blur-2xl backdrop-saturate-150 md:hidden">
+        <div className="absolute top-16 right-0 left-0 z-50 h-[89dvh] border-t border-neutral-200 bg-white/60 shadow-sm backdrop-blur-2xl backdrop-saturate-150 md:hidden md:h-[91.5dvh]">
           <ul className="flex flex-col py-2">
             {navLinks.map((link, idx) => (
               <li key={`m-${link.to}`}>
