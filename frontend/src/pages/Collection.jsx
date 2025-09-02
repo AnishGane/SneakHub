@@ -16,6 +16,10 @@ const Collection = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // Filter products based on selected criteria
   const filteredProducts = products.filter((product) => {
     const categoryMatch =
