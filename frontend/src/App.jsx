@@ -12,6 +12,7 @@ import Login from './pages/Login';
 import { Toaster } from 'react-hot-toast';
 import Navbar from './component/Navbar';
 import { useLocation } from 'react-router-dom';
+import Footer from './component/Footer';
 
 function App() {
   const location = useLocation();
@@ -74,8 +75,8 @@ function App() {
           <Route path="/place-order" element={<PlaceOrder />} />
           <Route path="/orders" element={<Orders />} />
         </Routes>
+        <Footer />
       </div>
-      
     </>
   );
 }

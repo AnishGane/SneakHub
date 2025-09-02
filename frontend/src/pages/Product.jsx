@@ -85,7 +85,7 @@ const Product = () => {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen">
       {/* Breadcrumb */}
       <div className="bg-white sm:border-b">
         <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
@@ -126,10 +126,10 @@ const Product = () => {
       </div>
 
       <div className="mx-auto max-w-7xl px-4 py-2 sm:px-6 sm:py-8 lg:px-8">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6 sm:gap-12 lg:grid-cols-2">
           {/* Product Image */}
           <div className="space-y-4">
-            <div className="aspect-square overflow-hidden rounded-md border-2 border-black bg-white shadow-sm">
+            <div className="aspect-square overflow-hidden rounded-md border-2 border-gray-600 bg-white shadow-sm">
               <img
                 src={product.image}
                 alt={product.name}
@@ -295,10 +295,13 @@ const Product = () => {
 
         {/* Reviews Section */}
         <div className="mt-8">
-          <h2 className="mb-8 text-2xl font-bold text-gray-900">Customer Reviews</h2>
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+          <h2 className="mb-4 text-2xl font-bold text-gray-900">Customer Reviews</h2>
+          <div className="grid grid-cols-1 gap-3 sm:gap-8 md:grid-cols-2">
             {product.reviews.map((review) => (
-              <div key={review.id} className="rounded-md border-2 bg-white p-6 shadow-sm">
+              <div
+                key={review.id}
+                className="rounded-md border-2 border-gray-500 bg-white p-6 shadow-sm"
+              >
                 <div className="mb-4 flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     {renderStars(review.rating)}
@@ -314,8 +317,8 @@ const Product = () => {
 
         {/* Related Products */}
         <div className="mt-8">
-          <h2 className="mb-8 text-2xl font-bold text-gray-900">You might also like</h2>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <h2 className="mb-4 text-2xl font-bold text-gray-900">You might also like</h2>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4">
             {products
               .filter((p) => p.id !== product.id)
               .slice(0, 4)
@@ -336,12 +339,16 @@ const Product = () => {
                     />
                   </div>
                   <div className="p-4">
-                    <p className="text-sm text-gray-500">{relatedProduct.brand}</p>
-                    <h3 className="mt-1 font-semibold text-gray-900">{relatedProduct.name}</h3>
-                    <div className="mt-2 flex items-center justify-between">
+                    <div className="flex items-center justify-between gap-3 sm:gap-0">
+                      <p className="text-[11px] text-gray-500 sm:text-sm">{relatedProduct.brand}</p>
                       <span className="font-bold text-gray-900">
                         {formatPrice(relatedProduct.price)}
                       </span>
+                    </div>
+                    <h3 className="mt-1 text-sm font-semibold text-gray-900 sm:text-base">
+                      {relatedProduct.name}
+                    </h3>
+                    <div className="mt-2 flex items-center justify-between">
                       <div className="flex items-center space-x-1">
                         {renderStars(relatedProduct.rating.average)}
                       </div>
