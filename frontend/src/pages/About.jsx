@@ -10,7 +10,7 @@ const About = () => {
         {/* Left Section */}
         <div className="flex flex-1 flex-col items-center gap-4 sm:gap-6">
           <div className="max-w-md text-center">
-            <h1 className="text-3xl font-semibold tracking-tight sm:text-5xl">About Us</h1>
+            <h1 className="text-3xl font-medium tracking-tight sm:text-5xl">About Us</h1>
             <p className="mt-2 text-base text-gray-600">
               Redefining sneaker culture with passion, authenticity, and modern style. At SneakHub,
               we believe shoes are more than fashion — they’re a lifestyle.
