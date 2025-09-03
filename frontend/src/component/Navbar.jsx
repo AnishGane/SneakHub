@@ -71,6 +71,29 @@ const Navbar = () => {
             </NavLink>
           </li>
         ))}
+        <SignedIn>
+          <li key="/orders">
+            <NavLink
+              to="/orders"
+              className="relative flex flex-col items-center justify-center gap-1 px-4 py-2 text-sm"
+              onMouseEnter={() => setHovered('orders')}
+              onMouseLeave={() => setHovered(null)}
+              onClick={() => {
+                setTimeout(() => {
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 0);
+              }}
+            >
+              {hovered === 'orders' && (
+                <motion.span
+                  layoutId="hovered-span"
+                  className="absolute inset-0 h-full w-full rounded-md bg-black/15"
+                ></motion.span>
+              )}
+              <span className="relative z-10 text-[16px] tracking-wide uppercase">Orders</span>
+            </NavLink>
+          </li>
+        </SignedIn>
       </ul>
 
       {/* Right Nav */}
@@ -133,6 +156,20 @@ const Navbar = () => {
                 </NavLink>
               </li>
             ))}
+            <SignedIn>
+              <li key="m-/orders">
+                <NavLink
+                  to="/orders"
+                  className="block px-4 py-3 text-[15px] tracking-wide uppercase"
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 0);
+                  }}
+                >
+                  Orders
+                </NavLink>
+              </li>
+            </SignedIn>
           </ul>
           <div className="flex items-center justify-between border-t border-neutral-200 px-4 py-3">
             <SignedOut>
