@@ -121,7 +121,7 @@ const Navbar = () => {
               className="h-auto w-7 cursor-pointer"
             />
             <span className="absolute -right-1 bottom-0 flex h-4 w-4 items-center justify-center rounded-full bg-black text-[10px] text-white">
-              10
+              0
             </span>
           </div>
           <UserButton
