@@ -74,8 +74,18 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/place-order" element={<PlaceOrder />} />
           <Route path="/orders" element={<Orders />} />
+          <Route
+            path="*"
+            element={
+              <div className="my-4 flex min-h-[90dvh] w-full items-center justify-center bg-black text-white">
+                404 Not Found
+              </div>
+            }
+          />
         </Routes>
-        <Footer />
+        {location.pathname !== '/login' &&
+          location.pathname == '*' &&
+          location.pathname !== '/signup' && <Footer />}
       </div>
     </>
   );
