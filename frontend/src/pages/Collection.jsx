@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
-// import { useStore } from '../context/StoreContext.jsx';
-import { products } from '../assets/assets.js';
 import Card from '../component/Card.jsx';
 import Title from '../component/Title.jsx';
 import dropDown from '../assets/dropdown_icon.png';
 import { useNavigate } from 'react-router-dom';
+import { useStore } from '../context/StoreContext.jsx';
 
 const Collection = () => {
-  // const { products } = useStore();
+  const { productData, fetchProducts } = useStore();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedGender, setSelectedGender] = useState('all');
   const [sortType, setSortType] = useState('relevant');
@@ -21,7 +20,7 @@ const Collection = () => {
   }, []);
 
   // Filter products based on selected criteria
-  const filteredProducts = products.filter((product) => {
+  const filteredProducts = productData.filter((product) => {
     const categoryMatch =
       selectedCategory === 'all' || (product.tags?.includes(selectedCategory) ?? false);
     const genderMatch = selectedGender === 'all' || product.gender === selectedGender;
@@ -30,7 +29,7 @@ const Collection = () => {
     return categoryMatch && genderMatch && brandMatch;
   });
 
-  const brands = [...new Set(products.map((product) => product.brand))];
+  const brands = [...new Set(productData.map((product) => product.brand))];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,7 +37,6 @@ const Collection = () => {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-
     // Run once in case user already scrolled
     handleScroll();
 
@@ -195,7 +193,7 @@ const Collection = () => {
               </div>
               <div className="mt-4 mb-4 flex items-center justify-between sm:mt-0">
                 <p className="text-sm text-neutral-600 dark:text-gray-600">
-                  Showing {filteredProducts.length} of {products.length} products
+                  Showing {filteredProducts.length} of {productData.length} products
                 </p>
               </div>
 
@@ -224,7 +222,7 @@ const Collection = () => {
       {showScrollTop && (
         <button
           onClick={scrollToTop}
-          className="fixed right-5 bottom-5 z-50 flex items-center justify-center rounded-full bg-black p-3 text-white shadow-lg transition-all duration-300 hover:bg-gray-800 sm:right-10 sm:bottom-10"
+          className="fixed right-5 bottom-5 z-50 flex cursor-pointer items-center justify-center rounded-full bg-black p-3 text-white shadow-lg transition-all duration-300 hover:bg-gray-800 sm:right-10 sm:bottom-10"
           aria-label="Scroll to top"
         >
           <svg

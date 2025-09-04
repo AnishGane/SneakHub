@@ -1,9 +1,12 @@
 import React from 'react';
 import Title from './Title';
 import Card from './Card';
-import { getNewArrivals } from '../assets/assets.js';
 import { useNavigate } from 'react-router-dom';
+import { useStore } from '../context/StoreContext';
+
 const LatestCollection = () => {
+  const { productData } = useStore();
+
   const navigate = useNavigate();
   return (
     <div className="mt-2 w-full px-0 sm:mt-8 sm:px-2">
@@ -18,15 +21,18 @@ const LatestCollection = () => {
       {/* Grid */}
       <div className="mx-auto w-full max-w-7xl pb-8">
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-9 sm:px-2 md:grid-cols-4">
-          {getNewArrivals(8).map((product) => (
-            <Card
-              product={product}
-              key={product.id}
-              onClick={() => {
-                navigate(`/product/${product.id}`);
-              }}
-            />
-          ))}
+          {productData
+            .filter((product) => product.isNewArrival)
+            .slice(0, 8)
+            .map((product) => (
+              <Card
+                product={product}
+                key={product.id}
+                onClick={() => {
+                  navigate(`/product/${product.id}`);
+                }}
+              />
+            ))}
         </div>
       </div>
     </div>

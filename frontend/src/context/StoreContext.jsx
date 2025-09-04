@@ -1,11 +1,24 @@
-import React, { createContext, useContext, useState } from 'react';
-// import { products } from '../assets/assets';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { products } from '../assets/assets.js';
 
 const StoreContext = createContext(null);
 
 export const StoreProvider = ({ children }) => {
-  // const [products, setProducts] = useState(products);
-  const value = { };
+  const [productData, setProductData] = useState([]);
+
+  const fetchProducts = async () => {
+    setProductData(products);
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const value = {
+    productData,
+    setProductData,
+    fetchProducts,
+  };
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
 };

@@ -83,9 +83,7 @@ function App() {
             }
           />
         </Routes>
-        {location.pathname !== '/login' &&
-          location.pathname == '*' &&
-          location.pathname !== '/signup' && <Footer />}
+        {location.pathname !== '/login' && location.pathname !== '/signup' && <Footer />}
       </div>
     </>
   );
