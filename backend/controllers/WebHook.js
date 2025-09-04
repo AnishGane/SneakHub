@@ -33,6 +33,7 @@ const clerkWebHooks = async (req, res) => {
 
     const parsed = JSON.parse(payloadString || "{}");
     const { data, type } = parsed;
+    console.log("Received webhook:", type, data?.id);
 
     switch (type) {
       case "user.created": {
@@ -40,18 +41,26 @@ const clerkWebHooks = async (req, res) => {
           .filter(Boolean)
           .join(" ");
         const email = data?.email_addresses?.[0]?.email_address;
-        const image = data?.image_url;
-        if (!data?.id || !name || !email || !image) {
-          return res
-            .status(400)
-            .json({ success: false, message: "Missing required user fields" });
+        const image = data?.image_url || "";
+        if (!data?.id) {
+          console.log("user.created missing id, skipping");
+          return res.status(200).json({ success: true, note: "no id" });
         }
-        await User.create({
-          _id: data.id,
-          name,
-          email,
-          image,
-        });
+        if (!email) {
+          console.log("user.created missing email, skipping", data?.id);
+          return res.status(200).json({ success: true, note: "no email" });
+        }
+        await User.updateOne(
+          { _id: data.id },
+          {
+            $set: {
+              name: name || email,
+              email,
+              image,
+            },
+          },
+          { upsert: true }
+        );
         return res.json({ success: true });
       }
       case "user.updated": {
@@ -59,16 +68,24 @@ const clerkWebHooks = async (req, res) => {
           .filter(Boolean)
           .join(" ");
         const email = data?.email_addresses?.[0]?.email_address;
-        const image = data?.image_url;
-        await User.findByIdAndUpdate(
-          data?.id,
-          { name, email, image },
-          { new: true, upsert: false }
-        );
+        const image = data?.image_url || "";
+        if (!data?.id) {
+          console.log("user.updated missing id, skipping");
+          return res.status(200).json({ success: true, note: "no id" });
+        }
+        const updateSet = {};
+        if (name) updateSet.name = name;
+        if (email) updateSet.email = email;
+        if (image) updateSet.image = image;
+        await User.updateOne({ _id: data.id }, { $set: updateSet });
         return res.json({ success: true });
       }
       case "user.deleted": {
-        await User.findByIdAndDelete(data?.id);
+        if (!data?.id) {
+          console.log("user.deleted missing id, skipping");
+          return res.status(200).json({ success: true, note: "no id" });
+        }
+        await User.deleteOne({ _id: data.id });
         return res.json({ success: true });
       }
       default: {
