@@ -2,55 +2,82 @@ import { Webhook } from "svix";
 import User from "../models/user.model.js";
 
 // API controller Function to Manage Clerk User w/ database
-const clerkWebHooks = async () => {
+const clerkWebHooks = async (req, res) => {
   try {
-    // Create the Svix instance with clerk webhook secret
-    const whook = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
+    const webhookSecret = process.env.CLERK_WEBHOOK_SECRET;
+    if (!webhookSecret) {
+      return res
+        .status(500)
+        .json({ success: false, message: "Missing CLERK_WEBHOOK_SECRET" });
+    }
 
-    // Verify the headers
-    await whook.verify(JSON.stringify(req.body), {
+    const svix = new Webhook(webhookSecret);
+
+    const headers = {
       "svix-id": req.headers["svix-id"],
       "svix-timestamp": req.headers["svix-timestamp"],
       "svix-signature": req.headers["svix-signature"],
-    });
+    };
 
-    // Getting data from the request body
-    const { data, type } = req.body;
+    const payloadString = Buffer.isBuffer(req.body)
+      ? req.body.toString("utf8")
+      : String(req.body || "");
 
-    // Switch case for different events
+    try {
+      svix.verify(payloadString, headers);
+    } catch (err) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid webhook signature" });
+    }
+
+    const parsed = JSON.parse(payloadString || "{}");
+    const { data, type } = parsed;
+
     switch (type) {
       case "user.created": {
-        const userData = new User({
+        const name = [data?.first_name, data?.last_name]
+          .filter(Boolean)
+          .join(" ");
+        const email = data?.email_addresses?.[0]?.email_address;
+        const image = data?.image_url;
+        if (!data?.id || !name || !email || !image) {
+          return res
+            .status(400)
+            .json({ success: false, message: "Missing required user fields" });
+        }
+        await User.create({
           _id: data.id,
-          name: data.first_name + " " + data.last_name,
-          email: data.email_addresses[0].email_address,
-          image: data.image_url,
+          name,
+          email,
+          image,
         });
-        await User.create(userData);
-        res.json({});
-        break;
+        return res.json({ success: true });
       }
       case "user.updated": {
-        const userData = new User({
-          name: data.first_name + " " + data.last_name,
-          email: data.email_addresses[0].email_address,
-          image: data.image_url,
-        });
-        await User.findByIdAndUpdate(data.id, userData);
-        res.json({});
-        break;
+        const name = [data?.first_name, data?.last_name]
+          .filter(Boolean)
+          .join(" ");
+        const email = data?.email_addresses?.[0]?.email_address;
+        const image = data?.image_url;
+        await User.findByIdAndUpdate(
+          data?.id,
+          { name, email, image },
+          { new: true, upsert: false }
+        );
+        return res.json({ success: true });
       }
       case "user.deleted": {
-        await User.findByIdAndDelete(data.id);
-        res.json({});
-        break;
+        await User.findByIdAndDelete(data?.id);
+        return res.json({ success: true });
       }
-      default:
-        break;
+      default: {
+        return res.status(200).json({ success: true });
+      }
     }
   } catch (error) {
     console.log(error);
-    res.json({ success: false, message: "WebHooks error" });
+    return res.status(500).json({ success: false, message: "Webhooks error" });
   }
 };
 
