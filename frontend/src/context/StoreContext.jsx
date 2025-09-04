@@ -10,6 +10,15 @@ export const StoreProvider = ({ children }) => {
     setProductData(products);
   };
 
+  const handleAddToCart = (itemId, quantity, selectedSize, selectedColor) => {
+    if (!selectedSize || !selectedColor) {
+      alert('Please select both size and color');
+      return;
+    }
+    // Add to cart logic here
+    console.log('Adding to cart:', { itemId, selectedSize, selectedColor, quantity });
+  };
+
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -18,6 +27,7 @@ export const StoreProvider = ({ children }) => {
     productData,
     setProductData,
     fetchProducts,
+    handleAddToCart,
   };
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;

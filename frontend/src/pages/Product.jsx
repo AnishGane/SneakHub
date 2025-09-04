@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { products } from '../assets/assets.js';
 import { useNavigate } from 'react-router-dom';
+import { useStore } from '../context/StoreContext.jsx';
 
 const Product = () => {
   const { productId } = useParams();
@@ -10,6 +11,7 @@ const Product = () => {
   const [selectedColor, setSelectedColor] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
+  const { handleAddToCart } = useStore();
 
   if (!product) {
     return (
@@ -25,15 +27,6 @@ const Product = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  const handleAddToCart = () => {
-    if (!selectedSize || !selectedColor) {
-      alert('Please select both size and color');
-      return;
-    }
-    // Add to cart logic here
-    console.log('Adding to cart:', { product, selectedSize, selectedColor, quantity });
-  };
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat('en-US', {
@@ -265,7 +258,7 @@ const Product = () => {
             {/* Add to Cart */}
 
             <button
-              onClick={handleAddToCart}
+              onClick={() => handleAddToCart(product.id, quantity, selectedColor, selectedSize)}
               className="w-full cursor-pointer rounded-xl bg-gray-900 px-6 py-4 font-semibold text-white transition-colors hover:bg-gray-800"
             >
               Add to Cart
