@@ -6,6 +6,7 @@ import clerkWebHooks from "./controllers/WebHook.js";
 import bodyParser from "body-parser";
 import cartRouter from "./routes/cart.route.js";
 import productRouter from "./routes/product.route.js";
+import orderRouter from "./routes/order.router.js";
 
 const app = express();
 const PORT = process.env.PORT;
@@ -25,6 +26,7 @@ app.use(express.json());
 
 app.use("/api/cart", cartRouter);
 app.use("/api/product", productRouter);
+app.use("/api/order", orderRouter);
 
 app.use("/", (req, res) => {
   res.send("Hello World");

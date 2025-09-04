@@ -1,16 +1,21 @@
 import { requireAuth } from "@clerk/express";
 
-const baseRequireAuth = requireAuth();
-
 const clerkAuthMiddleware = (req, res, next) => {
-  baseRequireAuth(req, res, (err) => {
-    if (err) return; // requireAuth already handled response
-    // Mirror into req.user for existing controller usage
-    const userId = req.auth?.userId;
-    const sessionId = req.auth?.sessionId;
+  // Require valid Clerk auth and mirror to req.user
+  requireAuth()(req, res, (err) => {
+    if (err) {
+      // If Clerk rejected, return 401
+      return res
+        .status(401)
+        .json({ error: "Unauthorized", details: err.message });
+    }
+
+    const { userId, sessionId } = req.auth || {};
     if (!userId) {
       return res.status(401).json({ error: "Unauthorized" });
     }
+
+    // Attach to req.user for controllers
     req.user = { userId, sessionId };
     next();
   });
