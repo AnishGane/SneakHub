@@ -7,6 +7,8 @@ import bodyParser from "body-parser";
 import cartRouter from "./routes/cart.route.js";
 import productRouter from "./routes/product.route.js";
 import orderRouter from "./routes/order.router.js";
+import { clerkMiddleware } from "@clerk/express";
+import { clerkClient, requireAuth, getAuth } from "@clerk/express";
 
 const app = express();
 const PORT = process.env.PORT;
@@ -20,6 +22,7 @@ app.post(
   bodyParser.raw({ type: "application/json" }),
   clerkWebHooks
 );
+app.use(clerkMiddleware());
 
 // JSON for normal routes (registered AFTER webhook so it doesn't consume raw body)
 app.use(express.json());
