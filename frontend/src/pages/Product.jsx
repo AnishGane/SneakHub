@@ -1,17 +1,64 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { products } from '../assets/assets.js';
+// import { products } from '../assets/assets.js';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../context/StoreContext.jsx';
 
 const Product = () => {
   const { productId } = useParams();
-  const product = products.find((p) => p.id === productId);
+  const { productData: products, getSingleProductData } = useStore();
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
-  const { handleAddToCart } = useStore();
+
+  // Fetch single product data
+  useEffect(() => {
+    const fetchProduct = async () => {
+      if (productId) {
+        setLoading(true);
+        try {
+          const productData = await getSingleProductData(productId);
+          if (productData) {
+            setProduct(productData);
+          }
+        } catch (error) {
+          console.error('Error fetching product:', error);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        console.error('No productId found in URL parameters');
+        setLoading(false);
+      }
+    };
+
+    fetchProduct();
+  }, [productId, getSingleProductData]);
+
+  // Debug logging
+  console.log('Current URL:', window.location.href);
+  console.log('Product ID from URL:', productId);
+  console.log('Product ID type:', typeof productId);
+  console.log('Products from context:', products);
+  console.log('Found product:', product);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-center">
+          <h2 className="mb-2 text-2xl font-semibold text-gray-800">Loading...</h2>
+          <p className="text-gray-600">Please wait while we fetch the product details.</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -23,10 +70,6 @@ const Product = () => {
       </div>
     );
   }
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat('en-US', {
@@ -132,7 +175,12 @@ const Product = () => {
             {/* Image Gallery Placeholder */}
             <div className="grid grid-cols-4 gap-4">
               {[1, 2, 3, 4].map((index) => (
-                <div key={index} className="aspect-square rounded-lg bg-gray-200"></div>
+                <div
+                  key={index}
+                  className="aspect-square content-center rounded-lg bg-gray-200 text-center font-semibold text-gray-400"
+                >
+                  <span>demo</span>
+                </div>
               ))}
             </div>
           </div>
@@ -258,7 +306,18 @@ const Product = () => {
             {/* Add to Cart */}
 
             <button
-              onClick={() => handleAddToCart(product.id, quantity, selectedColor, selectedSize)}
+              onClick={() => {
+                if (!selectedSize || !selectedColor) {
+                  alert('Please select both size and color');
+                  return;
+                }
+                console.log('Adding to cart:', {
+                  itemId: product._id || product.id,
+                  selectedSize,
+                  selectedColor,
+                  quantity,
+                });
+              }}
               className="w-full cursor-pointer rounded-xl bg-gray-900 px-6 py-4 font-semibold text-white transition-colors hover:bg-gray-800"
             >
               Add to Cart
@@ -313,15 +372,15 @@ const Product = () => {
           <h2 className="mb-4 text-2xl font-bold text-gray-900">You might also like</h2>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4">
             {products
-              .filter((p) => p.id !== product.id)
+              .filter((p) => (p._id || p.id) !== (product._id || product.id))
               .slice(0, 4)
               .map((relatedProduct) => (
                 <div
                   onClick={() => {
-                    navigate(`/product/${relatedProduct.id}`);
+                    navigate(`/product/${relatedProduct._id || relatedProduct.id}`);
                     window.scrollTo(0, 0);
                   }}
-                  key={relatedProduct.id}
+                  key={relatedProduct._id || relatedProduct.id}
                   className="cursor-pointer overflow-hidden rounded-xl bg-white shadow-sm transition-shadow hover:shadow-md"
                 >
                   <div className="aspect-square">

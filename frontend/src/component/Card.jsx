@@ -22,7 +22,7 @@ const Card = ({ product, onClick }) => {
       )}
 
       {/* Image */}
-      <div className="relative h-48 w-full overflow-hidden sm:h-56 md:h-64">
+      <div className="relative h-40 w-full overflow-hidden sm:h-56 md:h-64">
         <img
           src={product.image}
           alt={product.name}
@@ -38,7 +38,7 @@ const Card = ({ product, onClick }) => {
       </div>
 
       {/* Content */}
-      <div className="flex flex-1 flex-col gap-1 p-3 sm:p-4">
+      <div className="flex flex-1 flex-col gap-1 p-2 sm:p-4">
         {/* Brand */}
         <p className="text-xs font-light tracking-wide text-neutral-500 uppercase sm:text-sm dark:text-neutral-400">
           {product.brand}
@@ -50,7 +50,7 @@ const Card = ({ product, onClick }) => {
         </h3>
 
         {/* Rating */}
-        <div className="mt-1 flex items-center gap-1.5 sm:mt-3 sm:gap-2">
+        <div className="mt-0.5 flex items-center gap-1.5 sm:mt-3 sm:gap-2">
           <div className="flex items-center">
             {[...Array(5)].map((_, i) => (
               <svg
@@ -73,7 +73,7 @@ const Card = ({ product, onClick }) => {
         </div>
 
         {/* Price section */}
-        <div className="mt-0 flex flex-col items-center justify-between gap-1 sm:mt-3 sm:flex-col sm:gap-2 md:mt-4 md:flex-col md:gap-2 lg:flex-row lg:gap-0">
+        <div className="mt-0 flex flex-col items-center justify-between gap-1 sm:mt-2 sm:flex-col sm:gap-2 md:mt-4 md:flex-col md:gap-2 lg:flex-row lg:gap-0">
           <div className="flex w-full items-center justify-between gap-1 sm:w-auto sm:gap-3">
             <span className="text-lg font-bold text-neutral-900 sm:text-xl dark:text-white">
               ${product.price.toFixed(2)}
@@ -87,7 +87,7 @@ const Card = ({ product, onClick }) => {
 
           {/* Stock indicator */}
           <div
-            className={`w-full rounded-full px-5 py-2 text-center text-xs sm:px-3 sm:py-1.5 sm:text-sm md:w-full lg:w-auto ${
+            className={`w-full rounded-full px-3 py-1.5 text-center text-xs sm:px-3 sm:py-1.5 sm:text-sm md:w-full lg:w-auto ${
               product.stock > 20
                 ? 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400'
                 : product.stock > 5

@@ -9,9 +9,25 @@ import productRouter from "./routes/product.route.js";
 import orderRouter from "./routes/order.router.js";
 import { clerkMiddleware } from "@clerk/express";
 import { clerkClient, requireAuth, getAuth } from "@clerk/express";
+import cors from "cors";
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 4000;
+
+// CORS configuration
+const corsOptions = {
+  origin: [
+    "http://localhost:5173",
+    " http://192.168.0.102:5173/",
+    // "https://softstitch-ecommerce.onrender.com",
+    // "https://softstitch-ecommerce-admin.onrender.com",
+  ], // Add your frontend URLs
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "token"],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 connectDB();
 connectCloudinary();
@@ -22,6 +38,7 @@ app.post(
   bodyParser.raw({ type: "application/json" }),
   clerkWebHooks
 );
+
 app.use(clerkMiddleware());
 
 // JSON for normal routes (registered AFTER webhook so it doesn't consume raw body)

@@ -13,7 +13,7 @@ const Contact = () => {
   return (
     <div className="bg-white text-gray-800">
       {/* Hero */}
-      <section className="relative flex items-center justify-center bg-gray-100 px-6 py-10 sm:py-20">
+      <section className="relative flex items-center justify-center rounded-[8px] bg-gray-100 px-6 py-10 sm:py-20">
         <div className="max-w-3xl text-center">
           <h2 className="py-1 text-4xl leading-10 font-semibold">
             Get in <span className="rounded-[4px] bg-black px-2 py-1 text-white">Touch</span>
@@ -29,10 +29,10 @@ const Contact = () => {
       </section>
 
       {/* Contact Section */}
-      <section className="mx-auto max-w-6xl px-6 py-8">
+      <section className="mx-auto max-w-6xl py-4 sm:py-8">
         <div className="grid gap-10 sm:grid-cols-2">
           {/* Contact Form */}
-          <div className="rounded-2xl bg-gray-50 px-4 py-8 shadow-md">
+          <div className="rounded-[8px] bg-gray-50 px-4 py-8 shadow-md">
             <h2 className="mb-4 text-2xl font-semibold">Send us a message</h2>
             <form className="space-y-4">
               <div>
@@ -127,15 +127,18 @@ const Contact = () => {
       </section>
 
       {/* Map Section */}
-      <section className="mx-auto max-w-6xl px-6 pb-16">
-        <iframe
-          title="SneakHub Location"
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.4059245046406!2d85.30455442615445!3d27.704750525604712!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb18561f4aee2b%3A0xea8cc9f7fb4c772b!2sHanuman%20Dhoka%2C%20Kathmandu%2044600!5e0!3m2!1sen!2snp!4v1756829518468!5m2!1sen!2snp"
-          className="h-72 w-full rounded-2xl border-0 shadow-md"
-          allowFullScreen=""
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-        ></iframe>
+      <section className="mx-auto mt-2 max-w-6xl pb-4 sm:mt-0 sm:pb-0">
+        <div>
+          <h2 className="mb-4 text-2xl font-semibold">See Us on Maps</h2>
+          <iframe
+            title="SneakHub Location"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.4059245046406!2d85.30455442615445!3d27.704750525604712!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb18561f4aee2b%3A0xea8cc9f7fb4c772b!2sHanuman%20Dhoka%2C%20Kathmandu%2044600!5e0!3m2!1sen!2snp!4v1756829518468!5m2!1sen!2snp"
+            className="h-72 w-full rounded-[8px] border-0 shadow-md"
+            allowFullScreen=""
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
       </section>
     </div>
   );

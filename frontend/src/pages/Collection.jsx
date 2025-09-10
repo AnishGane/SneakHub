@@ -4,28 +4,98 @@ import Title from '../component/Title.jsx';
 import dropDown from '../assets/dropdown_icon.png';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../context/StoreContext.jsx';
+import {
+  normalizeString,
+  buildKeywordListForSuggestions,
+  buildProductKeywordIndex,
+  computeSuggestions,
+  computeFuzzyResults,
+} from '../utils/searchUtils.js';
 
 const Collection = () => {
-  const { productData, fetchProducts } = useStore();
+  const { productData, search, setSearch, searchProducts } = useStore();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedGender, setSelectedGender] = useState('all');
   const [sortType, setSortType] = useState('relevant');
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [showFilter, setShowFilter] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [remoteResults, setRemoteResults] = useState(null);
+  const [isSearching, setIsSearching] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  // Debounced server search (regex-based)
+  useEffect(() => {
+    let active = true;
+    const controller = new AbortController();
+    const doSearch = async () => {
+      const q = (search || '').trim();
+      if (!q) {
+        setRemoteResults(null);
+        setIsSearching(false);
+        return;
+      }
+      setIsSearching(true);
+      try {
+        const results = await searchProducts(q);
+        if (active) setRemoteResults(Array.isArray(results) ? results : []);
+      } catch (_) {
+        if (active) setRemoteResults([]);
+      } finally {
+        if (active) setIsSearching(false);
+      }
+    };
+    const t = setTimeout(doSearch, 300);
+    return () => {
+      active = false;
+      clearTimeout(t);
+      controller.abort();
+    };
+  }, [search, searchProducts]);
+
+  // Fuzzy helpers from utils
+  const collectKeywords = React.useMemo(
+    () => buildKeywordListForSuggestions(productData),
+    [productData]
+  );
+  const productKeywordIndex = React.useMemo(
+    () => buildProductKeywordIndex(productData),
+    [productData]
+  );
+  const suggestions = React.useMemo(
+    () => computeSuggestions(collectKeywords, search),
+    [collectKeywords, search]
+  );
+  const fuzzyResults = React.useMemo(
+    () => computeFuzzyResults(productKeywordIndex, search),
+    [productKeywordIndex, search]
+  );
+
+  // Base list: when searching, prefer server results; if none, fall back to fuzzy results
+  const baseList = (() => {
+    const hasQuery = Boolean(normalizeString(search));
+    if (hasQuery) {
+      if (Array.isArray(remoteResults) && remoteResults.length > 0) return remoteResults;
+      if (fuzzyResults.length > 0) return fuzzyResults;
+      return [];
+    }
+    return productData || [];
+  })();
+
+  const hasQuery = Boolean(normalizeString(search));
+  const serverReturnedEmpty = Array.isArray(remoteResults) && remoteResults.length === 0;
+  const hasFuzzyCandidates = fuzzyResults.length > 0;
+
   // Filter products based on selected criteria
-  const filteredProducts = productData.filter((product) => {
+  const filteredProducts = baseList.filter((product) => {
     const categoryMatch =
       selectedCategory === 'all' || (product.tags?.includes(selectedCategory) ?? false);
     const genderMatch = selectedGender === 'all' || product.gender === selectedGender;
     const brandMatch = selectedBrands.length === 0 || selectedBrands.includes(product.brand);
-
     return categoryMatch && genderMatch && brandMatch;
   });
 
@@ -37,7 +107,7 @@ const Collection = () => {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    // Run once in case user already scrolled
+
     handleScroll();
 
     return () => {
@@ -45,7 +115,6 @@ const Collection = () => {
     };
   }, []);
 
-  // Smooth scroll
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -178,8 +247,25 @@ const Collection = () => {
 
             {/* Right Section - Products */}
             <div className="flex-1">
+              {/* Suggestion banner when server found nothing but fuzzy has candidates */}
+              {hasQuery && serverReturnedEmpty && hasFuzzyCandidates && (
+                <div className="mb-5 flex items-center gap-2 text-base">
+                  <p className="font-semibold">Did you mean: </p>
+                  <div className="flex flex-wrap gap-2 font-[400] text-slate-700 italic">
+                    {suggestions.length > 0
+                      ? suggestions
+                      : Array.from(
+                          new Set(
+                            fuzzyResults
+                              .map((p) => normalizeString(p?.name || p?.brand))
+                              .filter(Boolean)
+                          )
+                        ).slice(0, 5)}
+                  </div>
+                </div>
+              )}
               {/* Results Header */}
-              <div className="flex flex-col items-center justify-between text-3xl sm:flex-row">
+              <div className="flex flex-col items-center justify-between gap-3 text-3xl sm:flex-row">
                 <Title text1={'OUR'} text2={'COLLECTIONS'} />
                 {/* Filter by price */}
                 <select
@@ -193,7 +279,9 @@ const Collection = () => {
               </div>
               <div className="mt-4 mb-4 flex items-center justify-between sm:mt-0">
                 <p className="text-sm text-neutral-600 dark:text-gray-600">
-                  Showing {filteredProducts.length} of {productData.length} products
+                  {isSearching
+                    ? 'Searching…'
+                    : `Showing ${filteredProducts.length} of ${baseList.length} products`}
                 </p>
               </div>
 
@@ -202,16 +290,33 @@ const Collection = () => {
                 <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
                   {sortedProducts.map((product) => (
                     <Card
-                      // key={product.id || product.sku || index}
-                      key={product.id}
+                      key={product._id || product.id || product.sku}
                       product={product}
-                      onClick={() => navigate(`/product/${product.id}`)}
+                      onClick={() => navigate(`/product/${product._id || product.id}`)}
                     />
                   ))}
                 </div>
               ) : (
-                <div className="flex h-40 items-center justify-center rounded-md border border-neutral-300 bg-neutral-100 text-lg text-gray-600">
-                  <p className="text-center"> No products found. Try adjusting your filters.</p>
+                <div className="flex flex-col items-center justify-center gap-3 rounded-md border border-neutral-300 bg-neutral-100 p-6 text-gray-700">
+                  <p className="text-center text-lg">
+                    No products found. Try adjusting your filters.
+                  </p>
+                  {normalizeString(search) && suggestions.length > 0 && (
+                    <div className="text-center">
+                      <p className="mb-2 text-sm text-neutral-600">Did you mean:</p>
+                      <div className="flex flex-wrap justify-center gap-2">
+                        {suggestions.map((s) => (
+                          <button
+                            key={s}
+                            onClick={() => setSearch(s)}
+                            className="cursor-pointer rounded-full border border-neutral-400 px-3 py-1 text-sm hover:bg-neutral-200"
+                          >
+                            {s}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

@@ -17,7 +17,7 @@ const toArray = (val) => {
   return [];
 };
 
-// Function to add products aligned to Product schema
+// Function to add products aligned to Product schema (Working fine in postman till now)
 const addProduct = async (req, res) => {
   try {
     const {
@@ -102,7 +102,7 @@ const addProduct = async (req, res) => {
   }
 };
 
-// Function to remove products
+// Function to remove products (Working fine in postman)
 const removeProduct = async (req, res) => {
   try {
     const id = req.params?.id || req.body?.id;
@@ -129,14 +129,15 @@ const removeProduct = async (req, res) => {
   }
 };
 
-// Function to list the products
+// Function to list the products (Working fine)
 const listProducts = async (req, res) => {
   try {
     const products = await Product.find({});
-    if (!products) {
+    if (products.length === 0) {
       return res.json({
         success: false,
         message: "No products found",
+        products: [],
       });
     }
     res.json({
@@ -153,7 +154,7 @@ const listProducts = async (req, res) => {
   }
 };
 
-// Function for single products info
+// Function for single products info (Working fine)
 const singleProduct = async (req, res) => {
   try {
     const productId = req.params?.id || req.body?.productId;
@@ -168,3 +169,24 @@ const singleProduct = async (req, res) => {
 };
 
 export { addProduct, removeProduct, listProducts, singleProduct };
+
+// Search products by name/brand/tags using case-insensitive regex
+export const searchProducts = async (req, res) => {
+  try {
+    const q = (req.query?.q || "").toString().trim();
+    if (!q) {
+      return res.json({ success: true, products: [] });
+    }
+    const regex = new RegExp(q, "i");
+    const products = await Product.find({
+      $or: [{ name: regex }, { brand: regex }, { tags: regex }],
+    });
+    return res.json({ success: true, products });
+  } catch (error) {
+    console.log("Error in searching products:", error);
+    return res.status(500).json({
+      success: false,
+      message: `Error in searching products: ${error.message}`,
+    });
+  }
+};

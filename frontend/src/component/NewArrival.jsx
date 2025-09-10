@@ -29,7 +29,7 @@ const LatestCollection = () => {
                 product={product}
                 key={product.id}
                 onClick={() => {
-                  navigate(`/product/${product.id}`);
+                  navigate(`/product/${product._id || product.id}`);
                 }}
               />
             ))}

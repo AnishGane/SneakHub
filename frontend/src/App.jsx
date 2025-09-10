@@ -13,6 +13,7 @@ import { Toaster } from 'react-hot-toast';
 import Navbar from './component/Navbar';
 import { useLocation } from 'react-router-dom';
 import Footer from './component/Footer';
+import SearchBar from './component/SearchBar';
 
 function App() {
   const location = useLocation();
@@ -21,6 +22,7 @@ function App() {
     <>
       <div className="px-4 sm:px-[4vw] md:px-[6vw] lg:px-[8vw]">
         {location.pathname !== '/login' && location.pathname !== '/signup' && <Navbar />}
+        <SearchBar />
         <Toaster
           position="bottom-right"
           reverseOrder={false}
