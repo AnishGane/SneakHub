@@ -6,7 +6,7 @@ import { useStore } from '../context/StoreContext.jsx';
 
 const Product = () => {
   const { productId } = useParams();
-  const { productData: products, getSingleProductData } = useStore();
+  const { productData: products, getSingleProductData, addToCart } = useStore();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState(null);
@@ -46,7 +46,7 @@ const Product = () => {
   console.log('Found product:', product);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
   if (loading) {
@@ -307,16 +307,7 @@ const Product = () => {
 
             <button
               onClick={() => {
-                if (!selectedSize || !selectedColor) {
-                  alert('Please select both size and color');
-                  return;
-                }
-                console.log('Adding to cart:', {
-                  itemId: product._id || product.id,
-                  selectedSize,
-                  selectedColor,
-                  quantity,
-                });
+                addToCart(product._id || product.id, selectedSize, selectedColor, quantity);
               }}
               className="w-full cursor-pointer rounded-xl bg-gray-900 px-6 py-4 font-semibold text-white transition-colors hover:bg-gray-800"
             >

@@ -3,6 +3,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { IoCartOutline, IoMenu, IoClose } from 'react-icons/io5';
 import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
+import { useStore } from '../context/StoreContext.jsx';
 import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
@@ -10,6 +11,7 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   const navigate = useNavigate();
+  const { cartItemCount } = useStore();
 
   const navLinks = [
     { to: '/', label: 'Home' },
@@ -121,7 +123,7 @@ const Navbar = () => {
               className="h-auto w-7 cursor-pointer"
             />
             <span className="absolute -right-1 bottom-0 flex h-4 w-4 items-center justify-center rounded-full bg-black text-[10px] text-white">
-              0
+              {cartItemCount}
             </span>
           </div>
           <UserButton

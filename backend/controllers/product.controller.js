@@ -170,7 +170,7 @@ const singleProduct = async (req, res) => {
 
 export { addProduct, removeProduct, listProducts, singleProduct };
 
-// Search products by name/brand/tags using case-insensitive regex
+// Search products by name/brand/tags using case-insensitive regex (Working fine)
 export const searchProducts = async (req, res) => {
   try {
     const q = (req.query?.q || "").toString().trim();
